@@ -4,7 +4,7 @@
 
 Board::Board(int codeLength, bool colorDuplicate) :
     m_duplicate(colorDuplicate), m_codeLength(codeLength),
-    m_pegsColor("wbrnlyoc")
+    m_remaining(10), m_pegsColor("wbrnlyoc")
 {
 }
 
@@ -30,6 +30,37 @@ bool Board::isCodeValid(const std::string &code)
     }
 
     return true;
+}
+
+bool Board::getResult(const std::string &code,
+                      std::string &hint)
+{
+    if (m_remaining == 0)
+    {
+        hint = std::string(m_codeLength, '-');
+        return false;
+    }
+
+    --m_remaining;
+    //transform string to lower case
+    std::string lowerCode;
+    lowerCode.resize(code.size());
+    std::transform(code.begin(), code.end(), lowerCode.begin(), tolower);
+
+    //compare for exact match (WIN)
+    if (code.compare(m_code) == 0)
+    {
+        hint = std::string(m_codeLength, 'O');
+        return true;
+    }
+
+    return false;
+}
+
+void Board::restartGame()
+{
+    generateCode();
+    m_remaining = 10;
 }
 
 void Board::generateCode()
