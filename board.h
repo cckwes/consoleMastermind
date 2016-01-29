@@ -18,17 +18,19 @@
 class Board
 {
 public:
-    Board(int codeLength = 4, bool colorDuplicate = false);
+    Board(size_t codeLength = 4, bool colorDuplicate = false);
     ~Board();
 
-    inline void setCodeLength(int codeLength) {
+    inline void setCodeLength(size_t codeLength) {
         if (codeLength >= 4 && codeLength <= 8)
             m_codeLength = codeLength;
         else
             m_codeLength = 4;
     }
     inline void setDuplicate(bool enabled) {m_duplicate = enabled;}
-    inline int getRemaining() {return m_remaining;}
+    inline size_t getRemaining() {return m_remaining;}
+    inline bool getDuplicate() {return m_duplicate;}
+    inline size_t getCodeLength() {return m_codeLength;}
 
     //check code for valid length and character
     bool isCodeValid(const std::string &code);
@@ -49,8 +51,8 @@ private:
     void generateCode();
 
     bool m_duplicate;               //allow/disallow duplication
-    int m_codeLength;               //code length [4,8]
-    int m_remaining;                //number of trial remaining
+    size_t m_codeLength;               //code length [4,8]
+    size_t m_remaining;                //number of trial remaining
     std::string m_pegsColor;        //store the colors available
     std::string m_code;             //store the code generated
 };

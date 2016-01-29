@@ -2,7 +2,7 @@
 #include <algorithm>
 #include "board.h"
 
-Board::Board(int codeLength, bool colorDuplicate) :
+Board::Board(size_t codeLength, bool colorDuplicate) :
     m_duplicate(colorDuplicate), m_codeLength(codeLength),
     m_remaining(10), m_pegsColor("wbrnlyoc")
 {
@@ -54,6 +54,46 @@ bool Board::getResult(const std::string &code,
         return true;
     }
 
+    //white represents correct color but incorrect position
+    //black represents correct color and position
+    int whiteCount = 0, blackCount = 0;
+
+    std::string true_code_copy = m_code;
+
+    //compare code by code
+    for (size_t i = 0; i < code.size(); ++i)
+    {
+        //compare if correct position and correct color
+        if (strcmp(&code[i], &true_code_copy[i]))
+        {
+            ++blackCount;
+            true_code_copy[i] = 0;
+            continue;
+        }
+        else
+        {
+            //incorrect position but color is correct
+            size_t pos = true_code_copy.find(code[i]);
+
+            if (pos == std::string::npos)
+                continue;
+            else
+            {
+                if (pos < m_codeLength)
+                {
+                    ++whiteCount;
+                    true_code_copy[pos] = 0;
+                    continue;
+                }
+            }
+        }
+    }
+
+    //pack the hint
+    hint.append(std::string(blackCount, 'X'));
+    hint.append(std::string(whiteCount, 'O'));
+    hint.append(std::string(m_codeLength - whiteCount - blackCount, '-'));
+
     return false;
 }
 
@@ -74,7 +114,7 @@ void Board::generateCode()
     {
         std::uniform_int_distribution<> dis(0, m_pegsColor.size() - 1);
 
-        for (int i = 0; i < m_codeLength; ++i)
+        for (size_t i = 0; i < m_codeLength; ++i)
         {
             m_code[i] = m_pegsColor[dis(g)];
         }
@@ -87,7 +127,7 @@ void Board::generateCode()
         std::shuffle(rand_container.begin(),
                      rand_container.end(), g);
 
-        for (int i = 0; i < m_codeLength; ++i)
+        for (size_t i = 0; i < m_codeLength; ++i)
         {
             m_code[i] = rand_container[i];
         }
