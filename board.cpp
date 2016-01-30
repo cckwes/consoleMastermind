@@ -49,7 +49,7 @@ bool Board::getResult(const std::string &code,
     std::transform(code.begin(), code.end(), lowerCode.begin(), tolower);
 
     //compare for exact match (WIN)
-    if (code.compare(m_code) == 0)
+    if (lowerCode.compare(m_code) == 0)
     {
         hint = std::string(m_codeLength, 'O');
         return true;

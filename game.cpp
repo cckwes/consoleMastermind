@@ -103,9 +103,15 @@ void Game::settings()
             std::transform(settingsString.begin(), settingsString.end(), settingsString.begin(), tolower);
 
             if (settingsString == "y")
+            {
                 b->setDuplicate(true);
+                break;
+            }
             else if (settingsString == "n")
+            {
                 b->setDuplicate(false);
+                break;
+            }
             else
             {
                 std::cout << "Invalid input\n";
