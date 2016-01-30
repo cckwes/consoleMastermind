@@ -9,11 +9,13 @@ public:
     Game();
     ~Game();
 
-    void welcome();
-    int start();
-    void settings();
+    void start();
 
 private:
+    void settings();
+    void welcome();
+    int startGame();
+
     Board *b;
 };
 

@@ -23,7 +23,35 @@ void Game::welcome()
               << "Enter 'Q' to quit the game\n";
 }
 
-int Game::start()
+void Game::start()
+{
+    std::string inputString;
+
+    while (1)
+    {
+        welcome();
+        std::getline(std::cin, inputString);
+        std::transform(inputString.begin(), inputString.end(),
+                       inputString.begin(), tolower);
+
+        if (inputString == "r")
+        {
+            int ret = startGame();
+            if (ret == 1)
+                break;
+            else
+                continue;
+        }
+        else if (inputString == "s")
+            settings();
+        else if (inputString == "q")
+            break;
+        else
+            std::cout << "Invalid input\n\n";
+    }
+}
+
+int Game::startGame()
 {
     std::cout << "Color list:\n"
               << "W for white, B for Black\n"
@@ -79,6 +107,7 @@ void Game::settings()
 {
     std::string settingsString;
 
+    //prompt for code duplication settings
     while (1)
     {
         std::cout << "Allow duplicate code ";
@@ -120,6 +149,7 @@ void Game::settings()
         }
     }
 
+    //prompt for code length settings
     while (1)
     {
         std::cout << "Code length (" << b->getCodeLength() << "):\t";
