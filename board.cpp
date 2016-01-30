@@ -1,5 +1,6 @@
 #include <random>
 #include <algorithm>
+#include <cstring>
 #include "board.h"
 
 Board::Board(size_t codeLength, bool colorDuplicate) :
@@ -58,22 +59,22 @@ bool Board::getResult(const std::string &code,
     //black represents correct color and position
     int whiteCount = 0, blackCount = 0;
 
-    std::string true_code_copy = m_code;
+    std::string trueCodeCopy = m_code;
 
     //compare code by code
     for (size_t i = 0; i < code.size(); ++i)
     {
         //compare if correct position and correct color
-        if (strcmp(&code[i], &true_code_copy[i]))
+        if (lowerCode[i] == trueCodeCopy[i])
         {
             ++blackCount;
-            true_code_copy[i] = 0;
+            trueCodeCopy[i] = 0;
             continue;
         }
         else
         {
             //incorrect position but color is correct
-            size_t pos = true_code_copy.find(code[i]);
+            size_t pos = trueCodeCopy.find(lowerCode[i]);
 
             if (pos == std::string::npos)
                 continue;
@@ -82,7 +83,7 @@ bool Board::getResult(const std::string &code,
                 if (pos < m_codeLength)
                 {
                     ++whiteCount;
-                    true_code_copy[pos] = 0;
+                    trueCodeCopy[pos] = 0;
                     continue;
                 }
             }

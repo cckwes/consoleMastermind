@@ -18,12 +18,12 @@ Game::~Game()
 void Game::welcome()
 {
     std::cout << "Welcome to console Mastermind\n"
-              << "Enter \'R\' to start game\n"
-              << "Enter \'S\' for game settings\n"
-              << "Enter \'Q\' to quit the game\n";
+              << "Enter 'R' to start game\n"
+              << "Enter 'S' for game settings\n"
+              << "Enter 'Q' to quit the game\n";
 }
 
-bool Game::start()
+int Game::start()
 {
     std::cout << "Color list:\n"
               << "W for white, B for Black\n"
@@ -32,7 +32,9 @@ bool Game::start()
               << "O for orange, C for brown\n"
               << "Hint: \n"
               << "'X' Correct color and position\n"
-              << "'O' Correct color but not position\n";
+              << "'O' Correct color but not position\n"
+              << "Command: \n"
+              << "'Q' to quit, 'R' to start a new game\n";
 
     b->restartGame();
 
@@ -41,6 +43,11 @@ bool Game::start()
         std::string inputString;
         std::cout << "[" << b->getRemaining() << "] Code:\t";
         std::getline(std::cin, inputString);
+
+        if (inputString == "Q" || inputString == "q")
+            return 1;
+        else if (inputString == "R" || inputString == "r")
+            return 2;
 
         while (!b->isCodeValid(inputString))
         {
@@ -54,7 +61,7 @@ bool Game::start()
         if (b->getResult(inputString, hint))
         {
             std::cout << "You won!\n";
-            return true;
+            return 0;
         }
         else
         {
@@ -64,7 +71,8 @@ bool Game::start()
     }
 
     std::cout << "Run out of moves!";
-    return false;
+    std::cout << "Correct code:\t" << b->getCode() << "\n";
+    return 0;
 }
 
 void Game::settings()

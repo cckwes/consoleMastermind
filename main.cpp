@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 
 #include "game.h"
 
@@ -14,7 +15,13 @@ int main()
         std::transform(inputString.begin(), inputString.end(), inputString.begin(), tolower);
 
         if (inputString == "r")
-            g.start();
+        {
+            int ret = g.start();
+            if (ret == 1)
+                break;
+            else
+                continue;
+        }
         else if (inputString == "s")
             g.settings();
         else if (inputString == "q")

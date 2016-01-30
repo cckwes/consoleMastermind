@@ -10,7 +10,7 @@ public:
     ~Game();
 
     void welcome();
-    bool start();
+    int start();
     void settings();
 
 private:
