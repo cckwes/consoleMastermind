@@ -53,15 +53,9 @@ void Game::start()
 
 int Game::startGame()
 {
-    std::cout << "Color list:\n"
-              << "W for white, B for Black\n"
-              << "R for red, N for Green\n"
-              << "L for blue, Y for Yellow\n"
-              << "O for orange, C for brown\n"
-              << "Hint: \n"
-              << "'X' Correct color and position\n"
-              << "'O' Correct color but not position\n"
-              << "Command: \n"
+    b->printColorList();
+    b->printHintList();
+    std::cout << "Command: \n"
               << "'Q' to quit, 'R' to start a new game\n";
 
     b->restartGame();

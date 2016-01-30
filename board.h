@@ -2,18 +2,6 @@
 #define BOARD_H
 
 #include <string>
-#include <vector>
-
-/*
-    White = 'w',
-    Black = 'b',
-    Red = 'r',
-    Green = 'n',
-    Blue = 'l',
-    Yellow = 'y',
-    Orange = 'o',
-    Brown = 'c'
-*/
 
 class Board
 {
@@ -31,6 +19,7 @@ public:
     inline size_t getRemaining() {return m_remaining;}
     inline bool getDuplicate() {return m_duplicate;}
     inline size_t getCodeLength() {return m_codeLength;}
+    inline std::string getCode() {return m_code;}
 
     //check code for valid length and character
     bool isCodeValid(const std::string &code);
@@ -42,9 +31,11 @@ public:
     //restart game
     void restartGame();
 
-    //remove during production
-    inline std::string getCode() {return m_code;}
+    //print color list
+    void printColorList();
 
+    //print hint list
+    void printHintList();
 
 private:
     //generate code for new game

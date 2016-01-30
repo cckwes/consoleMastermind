@@ -1,6 +1,8 @@
 #include <random>
 #include <algorithm>
 #include <cstring>
+#include <iostream>
+
 #include "board.h"
 
 Board::Board(size_t codeLength, bool colorDuplicate) :
@@ -24,7 +26,7 @@ bool Board::isCodeValid(const std::string &code)
 
     while (it != code.cend())
     {
-        auto found = m_pegsColor.find(*it);
+        auto found = m_pegsColor.find(tolower(*it));
         if (found == std::string::npos)
             return false;
         ++it;
@@ -133,4 +135,20 @@ void Board::generateCode()
             m_code[i] = rand_container[i];
         }
     }
+}
+
+void Board::printColorList()
+{
+    std::cout << "Color list:\n"
+              << "W for white, B for Black\n"
+              << "R for red, N for Green\n"
+              << "L for blue, Y for Yellow\n"
+              << "O for orange, C for brown\n";
+}
+
+void Board::printHintList()
+{
+    std::cout << "Hint: \n"
+              << "'X' Correct color and position\n"
+              << "'O' Correct color but not position\n";
 }
