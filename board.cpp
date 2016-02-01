@@ -22,17 +22,12 @@ bool Board::isCodeValid(const std::string &code)
         return false;
 
     //check for invalid color code
-    auto it = code.cbegin();
+    auto it = std::find_if(code.cbegin(), code.cend(),
+                           [this](char c) {
+        return (m_pegsColor.find(tolower(c)) == std::string::npos);
+    });
 
-    while (it != code.cend())
-    {
-        auto found = m_pegsColor.find(tolower(*it));
-        if (found == std::string::npos)
-            return false;
-        ++it;
-    }
-
-    return true;
+    return it == code.cend();
 }
 
 bool Board::getResult(const std::string &code,
@@ -47,8 +42,8 @@ bool Board::getResult(const std::string &code,
     --m_remaining;
     //transform string to lower case
     std::string lowerCode;
-    lowerCode.resize(code.size());
-    std::transform(code.begin(), code.end(), lowerCode.begin(), tolower);
+    std::transform(code.begin(), code.end(),
+                   std::back_inserter(lowerCode), tolower);
 
     //compare for exact match (WIN)
     if (lowerCode.compare(m_code) == 0)
@@ -64,30 +59,32 @@ bool Board::getResult(const std::string &code,
     std::string trueCodeCopy = m_code;
 
     //compare code by code
-    for (size_t i = 0; i < code.size(); ++i)
+    size_t i = 0;
+    for (const char &c : lowerCode)
     {
-        //compare if correct position and correct color
-        if (lowerCode[i] == trueCodeCopy[i])
+        if (c == trueCodeCopy[i])
         {
             ++blackCount;
             trueCodeCopy[i] = 0;
+            ++i;
             continue;
         }
         else
         {
             //incorrect position but color is correct
-            size_t pos = trueCodeCopy.find(lowerCode[i]);
+            size_t pos = trueCodeCopy.find(c);
 
             if (pos == std::string::npos)
-                continue;
-            else
             {
-                if (pos < m_codeLength)
-                {
-                    ++whiteCount;
-                    trueCodeCopy[pos] = 0;
-                    continue;
-                }
+                ++i;
+                continue;
+            }
+            else if (pos < m_codeLength)
+            {
+                ++whiteCount;
+                trueCodeCopy[pos] = 0;
+                ++i;
+                continue;
             }
         }
     }
@@ -108,7 +105,7 @@ void Board::restartGame()
 
 void Board::generateCode()
 {
-    m_code.resize(m_codeLength);
+    m_code.clear();
 
     std::random_device rd;
     std::mt19937 g(rd());
@@ -117,6 +114,7 @@ void Board::generateCode()
     {
         std::uniform_int_distribution<> dis(0, m_pegsColor.size() - 1);
 
+        m_code.resize(m_codeLength);
         for (size_t i = 0; i < m_codeLength; ++i)
         {
             m_code[i] = m_pegsColor[dis(g)];
@@ -130,10 +128,7 @@ void Board::generateCode()
         std::shuffle(rand_container.begin(),
                      rand_container.end(), g);
 
-        for (size_t i = 0; i < m_codeLength; ++i)
-        {
-            m_code[i] = rand_container[i];
-        }
+        std::copy_n(rand_container.begin(), m_codeLength, std::back_inserter(m_code));
     }
 }
 

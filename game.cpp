@@ -51,6 +51,18 @@ void Game::start()
     }
 }
 
+int checkQuitRestart(std::string &input)
+{
+    if (input.size() != 1)
+        return 0;
+    else if (input == "Q" || input == "q")
+        return 1;
+    else if (input == "R" || input == "r")
+        return 2;
+    else
+        return 0;
+}
+
 int Game::startGame()
 {
     b->printColorList();
@@ -66,16 +78,19 @@ int Game::startGame()
         std::cout << "[" << b->getRemaining() << "] Code:\t";
         std::getline(std::cin, inputString);
 
-        if (inputString == "Q" || inputString == "q")
-            return 1;
-        else if (inputString == "R" || inputString == "r")
-            return 2;
+        int ret = checkQuitRestart(inputString);
+        if (ret)
+            return ret;
 
         while (!b->isCodeValid(inputString))
         {
             std::cout << "Invalid code, please try again.\n";
             std::cout << "[" << b->getRemaining() << "] Code:\t";
             std::getline(std::cin, inputString);
+
+            ret = checkQuitRestart(inputString);
+            if (ret)
+                return ret;
         }
 
         std::string hint;
